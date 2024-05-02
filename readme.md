@@ -26,5 +26,13 @@ El proyecto contiene los siguientes archivos:
    Clona este repositorio en tu máquina local usando:
 
    ```bash
-   git clone [URL-del-repositorio]
-   cd [nombre-del-directorio]
+   git clone https://github.com/dmarmijosa/inesdi-bootcamp-fullStack.git
+   Accede al directorio.
+
+2. **Construir la imagen**
+
+   Desde el directorio raíz del proyecto, ejecuta:
+
+   ```bash
+   docker-compose build
+   Este comando construirá la imagen de Docker basada en las especificaciones del Dockerfile.
