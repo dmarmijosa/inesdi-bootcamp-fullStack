@@ -1,6 +1,38 @@
 const express = require('express');
 const mongoose = require('mongoose');
+
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+// Configuración de Swagger
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Node MongoDB API for INESDI',
+      version: '1.0.0',
+      description: 'This is a simple CRUD API application made with Express and documented with Swagger',
+      contact: {
+        name: "INESDI",
+        url: "https://www.inesdi.com",
+      }
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000',
+        description: 'Development Server'
+      }
+    ],
+  },
+  apis: ['./server.js'], // Path to the API docs
+};
+
+
+
 const app = express();
+
+const specs = swaggerJsdoc(options);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use(express.json());
 
@@ -87,6 +119,160 @@ app.delete('/items', async (req, res) => {
 });
 
 // Definir el puerto y poner a escuchar al servidor
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Item:
+ *       type: object
+ *       required:
+ *         - first_name
+ *         - last_name
+ *         - email
+ *         - gender
+ *         - address
+ *         - card
+ *         - married_status
+ *       properties:
+ *         first_name:
+ *           type: string
+ *         last_name:
+ *           type: string
+ *         email:
+ *           type: string
+ *         gender:
+ *           type: string
+ *         address:
+ *           type: object
+ *           properties:
+ *             city:
+ *               type: string
+ *             state:
+ *               type: string
+ *             country:
+ *               type: string
+ *             country_code:
+ *               type: string
+ *         card:
+ *           type: object
+ *           properties:
+ *             card_number:
+ *               type: string
+ *             card_type:
+ *               type: string
+ *             currency_code:
+ *               type: string
+ *             balance:
+ *               type: string
+ *         married_status:
+ *           type: boolean
+ *   responses:
+ *     NotFound:
+ *       description: The item was not found
+ *     BadRequest:
+ *       description: Invalid request
+ *     Unauthorized:
+ *       description: Authentication is needed to get requested response
+ */
+
+/**
+ * @swagger
+ * /items:
+ *   get:
+ *     summary: Get all items
+ *     tags: [Items]
+ *     responses:
+ *       200:
+ *         description: List of items
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Item'
+ */
+
+/**
+ * @swagger
+ * /items/search:
+ *   get:
+ *     summary: Search items based on query parameters
+ *     tags: [Items]
+ *     parameters:
+ *       - in: query
+ *         name: first_name
+ *         schema:
+ *           type: string
+ *         description: First name of the person to match
+ *       - in: query
+ *         name: last_name
+ *         schema:
+ *           type: string
+ *         description: Last name of the person to match
+ *     responses:
+ *       200:
+ *         description: An array of items that match the query
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Item'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /items:
+ *   put:
+ *     summary: Update an item
+ *     tags: [Items]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Item'
+ *     responses:
+ *       200:
+ *         description: The item was updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Item'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /items:
+ *   delete:
+ *     summary: Delete items based on query parameters
+ *     tags: [Items]
+ *     parameters:
+ *       - in: query
+ *         name: first_name
+ *         schema:
+ *           type: string
+ *         description: First name of the person to delete
+ *     responses:
+ *       200:
+ *         description: The number of deleted items
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 deletedCount:
+ *                   type: integer
+ *       204:
+ *         description: No items found to delete
+ */
+
+
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
