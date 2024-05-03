@@ -1,0 +1,29 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "This is a example of api with express, is a evaluation of INDESDI",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmarmijosa/inesdi-bootcamp-fullStack.git"
+  },
+  "keywords": [
+    "#api_rest",
+    "#mongodb",
+    "#express",
+    "#inesdi"
+  ],
+  "author": "Danny Armijos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmarmijosa/inesdi-bootcamp-fullStack/issues"
+  },
+  "homepage": "https://github.com/dmarmijosa/inesdi-bootcamp-fullStack#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.3.3"
+  }
+}
