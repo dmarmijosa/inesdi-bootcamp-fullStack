@@ -27,7 +27,8 @@ El proyecto contiene los siguientes archivos:
 
    ```bash
    git clone https://github.com/dmarmijosa/inesdi-bootcamp-fullStack.git
-   Accede al directorio.
+   
+Accede al directorio.
 
 2. **Construir la imagen**
 
@@ -35,4 +36,36 @@ El proyecto contiene los siguientes archivos:
 
    ```bash
    docker-compose build
-   Este comando construirá la imagen de Docker basada en las especificaciones del Dockerfile.
+
+Este comando construirá la imagen de Docker basada en las especificaciones del Dockerfile.
+
+3. **Levantar el Contenedor**
+
+   Para iniciar el contenedor de MongoDB, ejecuta:
+
+   ```bash
+   docker-compose up -d
+
+Este comando inicia el contenedor en modo desatendido. La base de datos, las colecciones y los documentos se inicializarán automáticamente si es la primera vez que se levanta el contenedor.
+
+4. **Conectar con MongoDB Shell**
+
+   Para conectar a la base de datos utilizando MongoDB Shell, ejecuta:
+
+   ```bash
+   docker exec -it mongodb mongosh -u admin -p password
+
+Esto abrirá una sesión de shell en la que puedes ejecutar comandos de MongoDB.
+
+5. **Parar y Eliminar el Contenedor**
+
+   Si necesitas detener y eliminar el contenedor, puedes usar:
+
+   ```bash
+   docker-compose down
+
+Esto detendrá y eliminará el contenedor, pero tus datos permanecerán seguros en el volumen Docker.
+
+## Persistencia de datos
+
+La persistencia de datos está configurada mediante un volumen Docker especificado en el docker-compose.yml. Los datos persisten entre reinicios del contenedor, garantizando que no se pierdan tus datos.
