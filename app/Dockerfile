@@ -1,20 +1,20 @@
-# Establecer la imagen base para Node.js
-FROM node:20
+# Usar la imagen base oficial de Node.js
+FROM node:18
 
-# Crear y establecer el directorio de trabajo en el contenedor
+# Crear el directorio de trabajo en el contenedor
 WORKDIR /usr/src/app
 
-# Copiar el archivo de dependencias primero para aprovechar la caché de Docker
+# Copiar los archivos de configuración de paquetes npm
 COPY package*.json ./
 
-# Instalar las dependencias del proyecto
+# Instalar todas las dependencias
 RUN npm install
 
-# Copiar el resto de los archivos del proyecto al contenedor
+# Copiar el resto del código fuente de la aplicación
 COPY . .
 
-# Exponer el puerto que utilizará la aplicación
+# Exponer el puerto que usa la aplicación
 EXPOSE 3000
 
-# Comando para ejecutar la aplicación
+# Comando para iniciar la aplicación
 CMD ["node", "server.js"]

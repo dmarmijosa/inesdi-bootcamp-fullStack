@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 
 // Configuración de Mongoose
-const mongoURI = `mongodb://admin:password@localhost:27017/testdb`;
+const mongoURI = 'mongodb://admin:password@mongodb:27017/testdb?authSource=admin';
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;

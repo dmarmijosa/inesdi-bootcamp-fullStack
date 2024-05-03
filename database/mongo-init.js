@@ -1,12 +1,14 @@
 db.createUser({
-    user: 'admin',
-    pwd: 'password',
-    roles: [{
-        role: 'readWrite',
-        db: 'testdb'
-    }]
-});
-
+    user: "admin",
+    pwd: "password",
+    roles: [
+      {
+        role: "readWrite",
+        db: "testdb"
+      }
+    ]
+  });
+  
 db = new Mongo().getDB("testdb");
 
 db.mycollection.insert([{"first_name":"Brandise","last_name":"Ingerman","email":"bingerman0@youku.com","gender":"Female","address":{"city":"Fresno","state":"California","country":"United States","country_code":"US"},"card":{"card_number":"3571237735836521","card_type":"jcb","currency_code":"USD","balance":"$630.16"},"married_status":true},
