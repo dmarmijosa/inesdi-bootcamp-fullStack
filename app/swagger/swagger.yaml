@@ -1,21 +1,21 @@
 openapi: 3.0.0
 info:
-  title: Node MongoDB API for INESDI
+  title: API de Node MongoDB para INESDI
   version: 1.0.0
-  description: This is a simple CRUD API application made with Express and documented with Swagger
+  description: Esta es una aplicación API simple de CRUD hecha con Express y documentada con Swagger
   contact:
     name: INESDI
     url: https://www.inesdi.com
 servers:
   - url: 'http://localhost:3000'
-    description: Development Server
+    description: Servidor de Desarrollo
 paths:
   /api/items:
     get:
-      summary: Get all items
+      summary: Obtener todos los ítems
       responses:
         '200':
-          description: List of items
+          description: Lista de ítems
           content:
             application/json:
               schema:
@@ -23,7 +23,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Item'
     put:
-      summary: Update an item
+      summary: Actualizar un ítem
       requestBody:
         required: true
         content:
@@ -32,22 +32,22 @@ paths:
               $ref: '#/components/schemas/Item'
       responses:
         '200':
-          description: The item was updated
+          description: El ítem fue actualizado
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Item'
     delete:
-      summary: Delete items based on query parameters
+      summary: Eliminar ítems basados en parámetros de consulta
       parameters:
         - in: query
           name: first_name
           schema:
             type: string
-          description: First name of the person to delete
+          description: Nombre del individuo a eliminar
       responses:
         '200':
-          description: The number of deleted items
+          description: Cantidad de ítems eliminados
           content:
             application/json:
               schema:
@@ -56,19 +56,19 @@ paths:
                   deletedCount:
                     type: integer
         '204':
-          description: No items found to delete
+          description: No se encontraron ítems para eliminar
   /api/items/search:
     get:
-      summary: Search items based on query parameters
+      summary: Buscar ítems basados en parámetros de consulta
       parameters:
         - in: query
           name: first_name
           schema:
             type: string
-          description: First name of the person to match
+          description: Nombre del individuo a coincidir
       responses:
         '200':
-          description: An array of items that match the query
+          description: Un arreglo de ítems que coinciden con la consulta
           content:
             application/json:
               schema:
