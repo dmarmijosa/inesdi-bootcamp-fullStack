@@ -1,3 +1,4 @@
+
 # MongoDB Docker Setup con Persistencia y MongoDB Shell
 
 Este proyecto configura un contenedor Docker para ejecutar una base de datos MongoDB con persistencia de datos y acceso al MongoDB Shell (mongosh). Ideal para desarrollo y pruebas.
@@ -27,8 +28,9 @@ El proyecto contiene los siguientes archivos:
 
    ```bash
    git clone https://github.com/dmarmijosa/inesdi-bootcamp-fullStack.git
-   
-Accede al directorio.
+   ```
+
+   Accede al directorio.
 
 2. **Construir la imagen**
 
@@ -36,8 +38,9 @@ Accede al directorio.
 
    ```bash
    docker-compose build
+   ```
 
-Este comando construirá la imagen de Docker basada en las especificaciones del Dockerfile.
+   Este comando construirá la imagen de Docker basada en las especificaciones del Dockerfile.
 
 3. **Levantar el Contenedor**
 
@@ -45,8 +48,9 @@ Este comando construirá la imagen de Docker basada en las especificaciones del 
 
    ```bash
    docker-compose up -d
+   ```
 
-Este comando inicia el contenedor en modo desatendido. La base de datos, las colecciones y los documentos se inicializarán automáticamente si es la primera vez que se levanta el contenedor.
+   Este comando inicia el contenedor en modo desatendido. La base de datos, las colecciones y los documentos se inicializarán automáticamente si es la primera vez que se levanta el contenedor.
 
 4. **Conectar con MongoDB Shell**
 
@@ -54,8 +58,9 @@ Este comando inicia el contenedor en modo desatendido. La base de datos, las col
 
    ```bash
    docker exec -it mongodb mongosh -u admin -p password
+   ```
 
-Esto abrirá una sesión de shell en la que puedes ejecutar comandos de MongoDB.
+   Esto abrirá una sesión de shell en la que puedes ejecutar comandos de MongoDB.
 
 5. **Parar y Eliminar el Contenedor**
 
@@ -63,9 +68,10 @@ Esto abrirá una sesión de shell en la que puedes ejecutar comandos de MongoDB.
 
    ```bash
    docker-compose down
+   ```
 
-Esto detendrá y eliminará el contenedor, pero tus datos permanecerán seguros en el volumen Docker.
+   Esto detendrá y eliminará el contenedor, pero tus datos permanecerán seguros en el volumen Docker.
 
 ## Persistencia de datos
 
-La persistencia de datos está configurada mediante un volumen Docker especificado en el docker-compose.yml. Los datos persisten entre reinicios del contenedor, garantizando que no se pierdan tus datos.
+La persistencia de datos está configurada mediante un volumen Docker especificado en el `docker-compose.yml`. Los datos persisten entre reinicios del contenedor, garantizando que no se pierdan tus datos.

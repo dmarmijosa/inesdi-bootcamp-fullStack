@@ -22,8 +22,90 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Item'
+    post:
+      summary: Crear un nuevo ítem
+      description: Crea un nuevo ítem asegurándose de que el correo electrónico sea único. Los campos first_name, email y gender son obligatorios.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  description: Nombre de la persona.
+                  example: "Juan"
+                last_name:
+                  type: string
+                  description: Apellido de la persona, puede ser nulo.
+                  example: "Pérez"
+                email:
+                  type: string
+                  description: Correo electrónico, debe ser único.
+                  example: "juan.perez@example.com"
+                gender:
+                  type: string
+                  description: Género de la persona.
+                  example: "Masculino"
+                address:
+                  type: object
+                  description: Dirección completa de la persona, puede ser nula.
+                  properties:
+                    city:
+                      type: string
+                      description: Ciudad
+                      example: "Madrid"
+                    state:
+                      type: string
+                      description: Estado o provincia
+                      example: "Madrid"
+                    country:
+                      type: string
+                      description: País
+                      example: "España"
+                    country_code:
+                      type: string
+                      description: Código del país
+                      example: "ES"
+                card:
+                  type: object
+                  description: Información de la tarjeta de crédito, puede ser nula.
+                  properties:
+                    card_number:
+                      type: string
+                      description: Número de la tarjeta de crédito.
+                      example: "4111111111111111"
+                    card_type:
+                      type: string
+                      description: Tipo de tarjeta.
+                      example: "Visa"
+                    currency_code:
+                      type: string
+                      description: Código de moneda.
+                      example: "EUR"
+                    balance:
+                      type: string
+                      description: Saldo disponible.
+                      example: "1000"
+                married_status:
+                  type: boolean
+                  description: Estado civil, falso por defecto.
+                  example: false
+              required:
+                - first_name
+                - email
+                - gender
     put:
-      summary: Actualizar un ítem
+      summary: Actualizar un ítem basado en el correo electrónico
+      description: Actualiza un ítem buscando por el correo electrónico proporcionado. Si no se encuentra un ítem con ese correo, se retorna un error.
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          required: true
+          description: El correo electrónico del ítem a actualizar.
       requestBody:
         required: true
         content:
@@ -32,19 +114,24 @@ paths:
               $ref: '#/components/schemas/Item'
       responses:
         '200':
-          description: El ítem fue actualizado
+          description: El ítem fue actualizado correctamente.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Item'
+        '404':
+          description: No se encontró un ítem con el correo electrónico proporcionado.
+        '400':
+          description: Falta proporcionar el correo electrónico en la solicitud.
     delete:
-      summary: Eliminar ítems basados en parámetros de consulta
+      summary: Eliminar ítems por correo electrónico
       parameters:
         - in: query
-          name: first_name
+          name: email
+          required: true
           schema:
             type: string
-          description: Nombre del individuo a eliminar
+          description: Correo electrónico del ítem a eliminar
       responses:
         '200':
           description: Cantidad de ítems eliminados
@@ -56,29 +143,33 @@ paths:
                   deletedCount:
                     type: integer
         '204':
-          description: No se encontraron ítems para eliminar
+          description: No se encontraron ítems para eliminar con ese correo electrónico
   /api/items/search:
     get:
-      summary: Buscar ítems basados en parámetros de consulta
+      summary: Buscar ítems por correo electrónico
       parameters:
         - in: query
-          name: first_name
+          name: email
+          required: true
           schema:
             type: string
-          description: Nombre del individuo a coincidir
+          description: Correo electrónico del ítem a buscar
       responses:
         '200':
-          description: Un arreglo de ítems que coinciden con la consulta
+          description: Un arreglo de ítems que coinciden con el correo electrónico proporcionado
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Item'
+        '404':
+          description: No se encontraron documentos coincidentes con ese correo electrónico
 components:
   schemas:
     Item:
       type: object
+      required: [first_name, email, gender]
       properties:
         first_name:
           type: string

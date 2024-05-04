@@ -1,10 +1,10 @@
 const mongoose = require('../database/database');
 
 const itemSchema = new mongoose.Schema({
-    first_name: String,
+    first_name: { type: String, required: true }, 
     last_name: String,
-    email: String,
-    gender: String,
+    email: { type: String, required: true, unique: true }, 
+    gender: { type: String, required: true }, 
     address: {
         city: String,
         state: String,
