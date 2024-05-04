@@ -1,71 +1,117 @@
-# MongoDB Docker Setup con Persistencia y MongoDB Shell
 
-Este proyecto configura un contenedor Docker para ejecutar una base de datos MongoDB con persistencia de datos y acceso al MongoDB Shell (mongosh). Ideal para desarrollo y pruebas.
+# Node MongoDB API de INESDI
 
-## Requisitos Previos
+Este proyecto consiste en una API desarrollada con Node.js y MongoDB para gestionar una colección de datos de usuarios. Utiliza Docker para facilitar el despliegue y la gestión del entorno de desarrollo y producción.
 
-Antes de comenzar, asegúrate de tener Docker instalado en tu sistema. Puedes descargar e instalar Docker desde [Docker Hub](https://www.docker.com/products/docker-desktop).
+## Estructura del Proyecto
 
-## Configuración
+- `/app`: Contiene el código fuente de la aplicación Node.js.
+- `/mongo`: Contiene configuraciones para el contenedor de MongoDB, incluyendo scripts de inicialización.
+- `docker-compose.yml`: Define los servicios, redes y volúmenes para Docker.
 
-El proyecto utiliza `docker-compose` para facilitar la configuración y manejo del contenedor de MongoDB. Aquí se detallan los pasos para levantar el contenedor:
+## Tecnologías Utilizadas
 
-### Estructura de Archivos
+- Node.js
+- MongoDB
+- Docker
+- Express
+- Mongoose
 
-El proyecto contiene los siguientes archivos:
+## Configuración con Docker
 
-- `Dockerfile`: Define la imagen de Docker personalizada basada en la imagen oficial de MongoDB.
-- `docker-compose.yml`: Configura los servicios necesarios para correr el contenedor de MongoDB.
-- `mongo-init.js`: Un script de JavaScript que se ejecuta cuando el contenedor es inicializado por primera vez para crear una base de datos, colecciones e insertar documentos iniciales.
-- `README.md`: Este archivo.
+El proyecto utiliza `docker-compose` para orquestar los contenedores de Node.js y MongoDB.
 
-### Instrucciones de Uso
+### Dockerfile para Node.js
 
-1. **Clonar el Repositorio**
+```dockerfile
+# Usar la imagen base oficial de Node.js
+FROM node:18
 
-   Clona este repositorio en tu máquina local usando:
+# Crear el directorio de trabajo en el contenedor
+WORKDIR /usr/src/app
 
+# Copiar los archivos de configuración de paquetes npm
+COPY package*.json ./
+
+# Instalar todas las dependencias
+RUN npm install
+
+# Copiar el resto del código fuente de la aplicación
+COPY . .
+
+# Exponer el puerto que usa la aplicación
+EXPOSE 3000
+
+# Comando para iniciar la aplicación
+CMD ["npm", "start"]
+```
+
+### Dockerfile para MongoDB
+
+```dockerfile
+# Usar la imagen oficial de MongoDB
+FROM mongo:latest
+
+# Instalar mongo shell
+RUN apt-get update && apt-get install -y mongodb-mongosh
+
+# Establecer variables de entorno para la autenticación de Mongo
+ENV MONGO_INITDB_ROOT_USERNAME=admin
+ENV MONGO_INITDB_ROOT_PASSWORD=password
+
+# Exponer el puerto por defecto de MongoDB
+EXPOSE 27017
+
+# Copiar el archivo de inicialización
+COPY mongo-init.js /docker-entrypoint-initdb.d/
+```
+
+### docker-compose.yml
+
+```yaml
+version: '3.8'
+
+services:
+  nodeapp:
+    build:
+      context: ./app
+    container_name: nodeapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    environment:
+      - NODE_ENV=production
+      - DB_URL=mongodb://admin:password@mongodb:27017/testdb
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+
+volumes:
+  mongodata:
+```
+
+## Instrucciones de Uso
+
+1. **Construir y levantar los servicios:**
    ```bash
-   git clone https://github.com/dmarmijosa/inesdi-bootcamp-fullStack.git
-   
-Accede al directorio.
+   docker-compose up --build
+   ```
 
-2. **Construir la imagen**
+2. **Acceder a la documentación de la API:**
+   Navegar a `http://localhost:3000/api-docs` para ver la documentación de Swagger y probar los endpoints de la API.
 
-   Desde el directorio raíz del proyecto, ejecuta:
-
-   ```bash
-   docker-compose build
-
-Este comando construirá la imagen de Docker basada en las especificaciones del Dockerfile.
-
-3. **Levantar el Contenedor**
-
-   Para iniciar el contenedor de MongoDB, ejecuta:
-
-   ```bash
-   docker-compose up -d
-
-Este comando inicia el contenedor en modo desatendido. La base de datos, las colecciones y los documentos se inicializarán automáticamente si es la primera vez que se levanta el contenedor.
-
-4. **Conectar con MongoDB Shell**
-
-   Para conectar a la base de datos utilizando MongoDB Shell, ejecuta:
-
-   ```bash
-   docker exec -it mongodb mongosh -u admin -p password
-
-Esto abrirá una sesión de shell en la que puedes ejecutar comandos de MongoDB.
-
-5. **Parar y Eliminar el Contenedor**
-
-   Si necesitas detener y eliminar el contenedor, puedes usar:
-
+3. **Detener y remover los servicios:**
    ```bash
    docker-compose down
+   ```
 
-Esto detendrá y eliminará el contenedor, pero tus datos permanecerán seguros en el volumen Docker.
-
-## Persistencia de datos
-
-La persistencia de datos está configurada mediante un volumen Docker especificado en el docker-compose.yml. Los datos persisten entre reinicios del contenedor, garantizando que no se pierdan tus datos.
+Este setup asegura que puedes trabajar con un entorno completamente aislado y reproducible, ideal para desarrollo y pruebas.
