@@ -4,6 +4,7 @@
   "description": "This is a example of api with express, is a evaluation of INDESDI",
   "main": "server.js",
   "scripts": {
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,7 +26,9 @@
   "dependencies": {
     "express": "^4.19.2",
     "mongoose": "^8.3.3",
+    "nodemon": "^2.0.15",
     "swagger-ui-express": "^4.1.6",
-    "swagger-jsdoc": "^6.0.1"
+    "swagger-jsdoc": "^6.0.1",
+    "yamljs": "^0.3.0"
   }
 }

@@ -1,0 +1,114 @@
+openapi: 3.0.0
+info:
+  title: Node MongoDB API for INESDI
+  version: 1.0.0
+  description: This is a simple CRUD API application made with Express and documented with Swagger
+  contact:
+    name: INESDI
+    url: https://www.inesdi.com
+servers:
+  - url: 'http://localhost:3000'
+    description: Development Server
+paths:
+  /api/items:
+    get:
+      summary: Get all items
+      responses:
+        '200':
+          description: List of items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+    put:
+      summary: Update an item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        '200':
+          description: The item was updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    delete:
+      summary: Delete items based on query parameters
+      parameters:
+        - in: query
+          name: first_name
+          schema:
+            type: string
+          description: First name of the person to delete
+      responses:
+        '200':
+          description: The number of deleted items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deletedCount:
+                    type: integer
+        '204':
+          description: No items found to delete
+  /api/items/search:
+    get:
+      summary: Search items based on query parameters
+      parameters:
+        - in: query
+          name: first_name
+          schema:
+            type: string
+          description: First name of the person to match
+      responses:
+        '200':
+          description: An array of items that match the query
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        gender:
+          type: string
+        address:
+          type: object
+          properties:
+            city:
+              type: string
+            state:
+              type: string
+            country:
+              type: string
+            country_code:
+              type: string
+        card:
+          type: object
+          properties:
+            card_number:
+              type: string
+            card_type:
+              type: string
+            currency_code:
+              type: string
+            balance:
+              type: string
+        married_status:
+          type: boolean
