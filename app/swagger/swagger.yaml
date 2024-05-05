@@ -22,6 +22,16 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Item'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error del servidor"
     post:
       summary: Crear un nuevo ítem
       description: Crea un nuevo ítem asegurándose de que el correo electrónico sea único. Los campos first_name, email y gender son obligatorios.
@@ -98,14 +108,14 @@ paths:
                 - gender
     put:
       summary: Actualizar un ítem basado en el correo electrónico
-      description: Actualiza un ítem buscando por el correo electrónico proporcionado. Si no se encuentra un ítem con ese correo, se retorna un error.
+      description: Actualiza un ítem buscando por el correo electrónico proporcionado en el parámetro de la consulta. No se permite cambiar el correo electrónico a través de esta operación.
       parameters:
         - in: query
           name: email
           schema:
             type: string
           required: true
-          description: El correo electrónico del ítem a actualizar.
+          description: El correo electrónico del ítem a actualizar. Este correo no puede ser modificado mediante la actualización.
       requestBody:
         required: true
         content:
@@ -122,7 +132,17 @@ paths:
         '404':
           description: No se encontró un ítem con el correo electrónico proporcionado.
         '400':
-          description: Falta proporcionar el correo electrónico en la solicitud.
+          description: Falta proporcionar el correo electrónico en la solicitud o se intentó modificar el correo.
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error del servidor"
     delete:
       summary: Eliminar ítems por correo electrónico
       parameters:
@@ -144,6 +164,16 @@ paths:
                     type: integer
         '204':
           description: No se encontraron ítems para eliminar con ese correo electrónico
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error del servidor"
   /api/items/search:
     get:
       summary: Buscar ítems por correo electrónico
@@ -165,6 +195,16 @@ paths:
                   $ref: '#/components/schemas/Item'
         '404':
           description: No se encontraron documentos coincidentes con ese correo electrónico
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error del servidor"
 components:
   schemas:
     Item:
