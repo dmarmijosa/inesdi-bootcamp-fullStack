@@ -113,5 +113,3 @@ volumes:
    ```bash
    docker-compose down
    ```
-
-Este setup asegura que puedes trabajar con un entorno completamente aislado y reproducible, ideal para desarrollo y pruebas.
